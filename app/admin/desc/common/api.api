@@ -29,10 +29,8 @@ type PageRequest {
 // 分页响应结构体
 // 所有列表接口返回分页信息
 type PageResponse {
-	// 数据总条数
 	Total int64 `json:"total"`
-	// 当前页码
-	Page int64 `json:"page"`
-	Size int64 `json:"size"`
+	Page  int64 `json:"page"`
+	Size  int64 `json:"size"`
 }
 

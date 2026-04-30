@@ -1,5 +1,5 @@
 syntax = "v1"
 
-import "./sys/user.api"
+import "./sys/account.api"
 import "./sys/menu.api"
 import "./sys/role.api"
