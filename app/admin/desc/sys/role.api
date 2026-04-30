@@ -1,0 +1,125 @@
+syntax = "v1"
+
+// 引入公共API结构体
+import "../common/api.api"
+
+type (
+	// 角色关联的菜单简要信息
+	RoleMenuInfo {
+		// 菜单ID
+		ID int64 `json:"id"`
+		// 菜单名称
+		Name string `json:"name"`
+	}
+	// 角色详情结构体
+	RoleInfo {
+		// 角色ID
+		ID int64 `json:"id"`
+		// 角色名称
+		Name string `json:"name"`
+		// 显示顺序
+		Sort int `json:"sort"`
+		// 状态：true-正常 false-禁用
+		Status bool `json:"status"`
+		// 备注
+		Remark string `json:"remark"`
+		// 创建时间
+		CreatedAt string `json:"created_at,omitempty"`
+		// 更新时间
+		UpdatedAt string `json:"updated_at,omitempty"`
+		// 关联菜单列表
+		Menus []*RoleMenuInfo `json:"menus"`
+	}
+	// 角色分页列表请求
+	RoleListRequest {
+		// 继承公共分页参数
+		PageRequest
+		// 角色ID，用于精确搜索（可选）
+		ID int64 `json:"id,optional"`
+		// 角色名称，用于模糊搜索（可选）
+		Name string `json:"name,optional"`
+	}
+	// 角色分页列表响应
+	RoleListResponse {
+		// 继承公共分页响应
+		PageResponse
+		// 角色列表数据
+		Data []*RoleInfo `json:"data"`
+	}
+	// 创建角色请求（创建时不需要ID）
+	RoleCreateRequest {
+		// 角色名称【必填】
+		Name string `json:"name" validate:"required"`
+		// 显示顺序（可选，默认0）
+		Sort int `json:"sort,optional"`
+		// 状态：true-正常 false-禁用（可选，默认true）
+		Status bool `json:"status,optional"`
+		// 备注（可选）
+		Remark string `json:"remark"`
+		// 菜单列表，每个元素为 {"id": 菜单ID}（可选）
+		Menus []*IDRequest `json:"menus,optional"`
+	}
+	// 更新角色请求（更新时需要ID）
+	RoleUpdateRequest {
+		// 角色ID【必填】
+		ID int64 `json:"id" validate:"required"`
+		// 角色名称（可选）
+		Name *string `json:"name,optional"`
+		// 显示顺序（可选）
+		Sort *int `json:"sort,optional"`
+		// 状态（可选）
+		Status *bool `json:"status,optional"`
+		// 备注（可选）
+		Remark *string `json:"remark,optional"`
+		// 菜单列表，每个元素为 {"id": 菜单ID}（可选）
+		Menus []*IDRequest `json:"menus,optional"`
+	}
+	// 关联角色和菜单请求
+	RoleAssociateMenusRequest {
+		// 角色ID【必填】
+		ID int64 `json:"id" validate:"required"`
+		// 菜单ID列表【必填】
+		MenuIds []int64 `json:"menu_ids" validate:"required"`
+	}
+)
+
+// 服务配置
+@server (
+	// 接口统一前缀
+	prefix: /api/v1/role
+	// 分组名称
+	group: role
+	// 开启JWT认证
+	jwt: Auth
+)
+// RoleApi 角色管理接口服务
+service admin-api {
+	// 角色分页列表
+	@handler ListHandler
+	get /list (RoleListRequest) returns (RoleListResponse)
+
+	// 角色详情
+	@handler DetailHandler
+	get /detail (IDRequest) returns (RoleInfo)
+
+	// 创建角色
+	@handler CreateHandler
+	post /create (RoleCreateRequest) returns (RoleInfo)
+
+	// 更新角色
+	@handler UpdateHandler
+	put /update (RoleUpdateRequest) returns (RoleInfo)
+
+	// 删除角色
+	@handler DeleteHandler
+	delete /delete (IDRequest) returns (EmptyResponse)
+
+	// 获取所有角色列表
+	@handler AllHandler
+	get /all returns ([]*RoleInfo)
+
+	// 关联角色和菜单
+	@handler AssociateMenusHandler
+	post /associate-menus (RoleAssociateMenusRequest) returns (RoleInfo)
+}
+

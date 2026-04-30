@@ -1,0 +1,152 @@
+syntax = "v1"
+
+import "../common/api.api"
+
+// 菜单相关类型定义
+type (
+	// 菜单实体对象
+	MenuInfo {
+		// 菜单ID
+		ID int64 `json:"id"`
+		// 父菜单ID
+		ParentID int64 `json:"parent_id"`
+		// 菜单类型 1-目录 2-菜单 3-按钮
+		MenuType int `json:"menu_type"`
+		// 菜单名称
+		Name string `json:"name"`
+		// 前端路由地址
+		Path string `json:"path"`
+		// 前端组件路径
+		Component string `json:"component"`
+		// 菜单图标
+		Icon string `json:"icon"`
+		// 显示顺序
+		Sort int `json:"sort"`
+		// 接口地址
+		ApiUrl string `json:"api_url"`
+		// 请求方式 GET/POST/PUT/DELETE
+		ApiMethod string `json:"api_method"`
+		// 是否显示 true-显示 false-隐藏
+		Visible bool `json:"visible"`
+		// 状态 true-正常 false-禁用
+		Status bool `json:"status"`
+		// 备注
+		Remark string `json:"remark"`
+		// 创建时间
+		CreatedAt string `json:"created_at,omitempty"`
+		// 更新时间
+		UpdatedAt string `json:"updated_at,omitempty"`
+		// 子菜单列表
+		Children []*MenuInfo `json:"children,omitempty"`
+	}
+	// 菜单列表查询请求
+	MenuListRequest {
+		// 分页公共参数
+		PageRequest
+		// 菜单ID，用于精确搜索（可选）
+		ID int64 `json:"id,optional"`
+		// 菜单名称，用于模糊搜索（可选）
+		Name string `json:"name,optional"`
+		// 状态筛选（可选）
+		Status bool `json:"status,optional"`
+	}
+	// 菜单列表查询响应
+	MenuListResponse {
+		// 分页公共响应
+		PageResponse
+		// 菜单列表数据
+		Data []*MenuInfo `json:"data"`
+	}
+	// 创建菜单请求（创建时不需要ID）
+	MenuCreateRequest {
+		// 菜单名称【必填】
+		Name string `json:"name" validate:"required"`
+		// 菜单类型 1-目录 2-菜单 3-按钮【必填】
+		MenuType int `json:"menu_type" validate:"required"`
+		// 前端路由地址【必填】
+		Path string `json:"path" validate:"required"`
+		// 前端组件路径（可选）
+		Component string `json:"component"`
+		// 菜单图标（可选）
+		Icon string `json:"icon"`
+		// 显示顺序（可选，默认0）
+		Sort int `json:"sort,optional"`
+		// 接口地址（可选）
+		ApiUrl string `json:"api_url"`
+		// 请求方式（可选，默认*）
+		ApiMethod string `json:"api_method"`
+		// 是否显示（可选，默认true）
+		Visible bool `json:"visible,optional"`
+		// 状态（可选，默认true）
+		Status bool `json:"status,optional"`
+		// 父菜单ID（可选，顶级菜单为0或空）
+		ParentID int64 `json:"parent_id"`
+		// 备注（可选）
+		Remark string `json:"remark"`
+	}
+	// 修改菜单请求（更新时需要ID）
+	MenuUpdateRequest {
+		// 菜单ID【必填】
+		ID int64 `json:"id" validate:"required"`
+		// 菜单名称（可选）
+		Name *string `json:"name,optional"`
+		// 菜单类型（可选）
+		MenuType *int `json:"menu_type,optional"`
+		// 路由地址（可选）
+		Path *string `json:"path,optional"`
+		// 组件路径（可选）
+		Component *string `json:"component,optional"`
+		// 菜单图标（可选）
+		Icon *string `json:"icon,optional"`
+		// 显示顺序（可选）
+		Sort *int `json:"sort,optional"`
+		// 接口地址（可选）
+		ApiUrl *string `json:"api_url,optional"`
+		// 请求方式（可选）
+		ApiMethod *string `json:"api_method,optional"`
+		// 是否显示（可选）
+		Visible *bool `json:"visible,optional"`
+		// 状态（可选）
+		Status *bool `json:"status,optional"`
+		// 父菜单ID（可选）
+		ParentID *int64 `json:"parent_id,optional"`
+		// 备注（可选）
+		Remark *string `json:"remark,optional"`
+	}
+)
+
+// 服务配置
+@server (
+	// 接口前缀
+	prefix: /api/v1/menu
+	// 分组
+	group: menu
+	// JWT认证
+	jwt: Auth
+)
+service admin-api {
+	// 菜单分页列表
+	@handler ListHandler
+	get /list (MenuListRequest) returns (MenuListResponse)
+
+	// 获取所有菜单列表（用于下拉选择）
+	@handler AllHandler
+	get /all returns ([]*MenuInfo)
+
+	// 获取菜单详情
+	@handler DetailHandler
+	get /detail (IDRequest) returns (MenuInfo)
+
+	// 创建菜单
+	@handler CreateHandler
+	post /create (MenuCreateRequest) returns (MenuInfo)
+
+	// 更新菜单
+	@handler UpdateHandler
+	put /update (MenuUpdateRequest) returns (MenuInfo)
+
+	// 删除菜单
+	@handler DeleteHandler
+	delete /delete (IDRequest) returns (EmptyResponse)
+}
+

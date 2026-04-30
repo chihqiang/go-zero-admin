@@ -1,0 +1,10 @@
+syntax = "v1"
+
+info (
+	title:   "后台管理系统 API"
+	desc:    "用户管理、权限控制、等接口服务"
+	version: "v1.0.0"
+)
+
+import "./desc/auth.api"
+import "./desc/sys.api"

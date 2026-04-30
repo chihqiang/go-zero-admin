@@ -1,0 +1,66 @@
+syntax = "v1"
+
+// 通用ID结构体
+// 用于接收/返回单一ID数据
+// ID路径参数请求
+// 适用于通过URL路径传递ID的接口
+type IDRequest {
+	// 数据ID
+	ID int64 `path:"id" form:"id" json:"id"`
+}
+
+// ID响应
+// 新增/编辑后只返回ID时使用
+type IDResponse {
+	// 数据ID
+	ID int64 `json:"id"`
+}
+
+// 空响应
+// 无返回数据的接口使用
+type EmptyResponse {}
+
+// 分页请求结构体
+// 所有列表分页接口通用
+// 分页请求参数
+type PageRequest {
+	// 当前页码
+	Page int64 `path:"page" form:"page" json:"page"`
+	// 每页显示条数
+	Size int64 `path:"size" form:"size" json:"size"`
+}
+
+// 分页响应结构体
+// 所有列表接口返回分页信息
+type PageResponse {
+	// 数据总条数
+	Total int64 `json:"total"`
+	// 当前页码
+	Current int64 `json:"current_page"`
+}
+
+// 排序项结构体
+// 用于批量排序接口
+type SortItem {
+	// 数据ID
+	ID int64 `path:"id" form:"id" json:"id"`
+	// 排序序号
+	Sort int `path:"sort" form:"sort" json:"sort"`
+}
+
+// 批量排序请求结构体
+// 传递一组需要排序的数据
+type SortRequest {
+	// 排序项列表
+	Items []*SortItem `json:"items"`
+}
+
+// 修改状态请求结构体
+// 启用/禁用类接口通用
+type UpdateStatusRequest {
+	// 数据ID
+	ID int64 `path:"id" form:"id" json:"id"`
+	// 状态 true-启用 false-禁用
+	Status bool `path:"status" form:"status" json:"status"`
+}
+

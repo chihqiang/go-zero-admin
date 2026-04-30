@@ -1,0 +1,102 @@
+syntax = "v1"
+
+import "../common/api.api"
+
+// 结构体定义
+type (
+	// 账号关联的角色信息
+	AccountRoleInfo {
+		// 角色ID
+		ID int64 `json:"id"`
+		// 角色名称
+		Name string `json:"name,omitempty"`
+	}
+	// 账号基础信息结构体
+	AccountInfo {
+		// 账号ID
+		ID int64 `json:"id"`
+		// 用户名
+		Name string `json:"name"`
+		// 邮箱地址
+		Email string `json:"email"`
+		// 状态：true-启用，false-禁用
+		Status bool `json:"status"`
+		// 关联的角色列表
+		Roles []*AccountRoleInfo `json:"roles"`
+	}
+	// 账号分页列表请求参数
+	AccountListRequest {
+		// 继承公共分页参数：page-页码，size-每页条数
+		PageRequest
+		// 账号ID，用于精确搜索（可选）
+		ID int64 `json:"id,optional"`
+	}
+	// 账号分页列表响应结果
+	AccountListResponse {
+		// 继承公共分页响应：total-总条数
+		PageResponse
+		// 账号数据列表
+		Data []*AccountInfo `json:"data"`
+	}
+	// 创建账号请求参数
+	AccountCreateRequest {
+		// 用户名【必填】
+		Name string `json:"name" validate:"required"`
+		// 登录密码【必填】
+		Password string `json:"password" validate:"required"`
+		// 邮箱地址【必填】
+		Email string `json:"email" validate:"required"`
+		// 账号状态：true-启用，false-禁用（可选，默认true）
+		Status bool `json:"status,optional"`
+		// 关联角色列表，每个元素为 {"id": 角色ID}（可选）
+		Roles []*IDRequest `json:"roles,optional"`
+	}
+	// 更新账号请求参数
+	AccountUpdateRequest {
+		// 账号ID【必填】
+		ID int64 `json:"id" validate:"required"`
+		// 用户名（可选）
+		Name *string `json:"name,optional"`
+		// 登录密码（可选，不填则不修改）
+		Password *string `json:"password,optional"`
+		// 邮箱地址（可选）
+		Email *string `json:"email,optional"`
+		// 账号状态（可选）
+		Status *bool `json:"status,optional"`
+		// 关联角色列表，每个元素为 {"id": 角色ID}（可选）
+		Roles []*IDRequest `json:"roles,optional"`
+	}
+)
+
+// 服务配置：账号管理模块
+@server (
+	// 接口统一前缀
+	prefix: /api/v1/account
+	// 路由分组名称
+	group: account
+	// 开启JWT身份认证
+	jwt: Auth
+)
+// admin-api 后台管理系统API服务
+service admin-api {
+	// 分页获取账号列表
+	@handler ListHandler
+	get /list (AccountListRequest) returns (AccountListResponse)
+
+	// 获取账号详情
+	@handler DetailHandler
+	get /detail (IDRequest) returns (AccountInfo)
+
+	// 创建账号
+	@handler CreateHandler
+	post /create (AccountCreateRequest) returns (AccountInfo)
+
+	// 更新账号
+	@handler UpdateHandler
+	put /update (AccountUpdateRequest) returns (AccountInfo)
+
+	// 删除账号
+	@handler DeleteHandler
+	delete /delete (IDRequest) returns (EmptyResponse)
+}
+
