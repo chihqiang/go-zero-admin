@@ -35,6 +35,12 @@ func (l *ListLogic) List(req *types.MenuListRequest) (resp *types.MenuListRespon
 	if req.ID > 0 {
 		db = db.Where("id = ?", req.ID)
 	}
+	if req.Name != "" {
+		db = db.Where("name LIKE ?", "%"+req.Name+"%")
+	}
+	if req.Status {
+		db = db.Where("status = ?", req.Status)
+	}
 
 	pageData, err := orm.Paginate[*models.Menu](db, req.Page, req.Size)
 	if err != nil {

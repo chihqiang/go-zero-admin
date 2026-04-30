@@ -5,12 +5,12 @@ package menu
 
 import (
 	"context"
+	"errors"
 
 	"go-zero-admin/app/admin/internal/svc"
 	"go-zero-admin/app/admin/internal/types"
 	"go-zero-admin/app/common/models"
 
-	"github.com/jinzhu/copier"
 	"github.com/zeromicro/go-zero/core/logx"
 )
 
@@ -34,9 +34,27 @@ func (l *UpdateLogic) Update(req *types.MenuUpdateRequest) (resp *types.MenuInfo
 		return nil, err
 	}
 
-	if req.Name != nil {
+	// 检查名称唯一性
+	if req.Name != nil && *req.Name != menu.Name {
+		var count int64
+		l.svcCtx.DB.Model(&models.Menu{}).Where("name = ? AND id != ?", *req.Name, req.ID).Count(&count)
+		if count > 0 {
+			return nil, errors.New("菜单名称已存在")
+		}
 		menu.Name = *req.Name
 	}
+
+	// 检查父菜单是否存在
+	if req.Pid != nil {
+		if *req.Pid > 0 {
+			var parentMenu models.Menu
+			if err := l.svcCtx.DB.First(&parentMenu, *req.Pid).Error; err != nil {
+				return nil, errors.New("父菜单不存在")
+			}
+		}
+		menu.Pid = *req.Pid
+	}
+
 	if req.MenuType != nil {
 		menu.MenuType = *req.MenuType
 	}
@@ -64,9 +82,6 @@ func (l *UpdateLogic) Update(req *types.MenuUpdateRequest) (resp *types.MenuInfo
 	if req.Status != nil {
 		menu.Status = *req.Status
 	}
-	if req.Pid != nil {
-		menu.Pid = *req.Pid
-	}
 	if req.Remark != nil {
 		menu.Remark = *req.Remark
 	}
@@ -75,10 +90,20 @@ func (l *UpdateLogic) Update(req *types.MenuUpdateRequest) (resp *types.MenuInfo
 		return nil, err
 	}
 
-	resp = &types.MenuInfo{}
-	if err := copier.Copy(resp, &menu); err != nil {
-		return nil, err
+	resp = &types.MenuInfo{
+		ID:        menu.ID,
+		Pid:       menu.Pid,
+		MenuType:  menu.MenuType,
+		Name:      menu.Name,
+		Path:      menu.Path,
+		Component: menu.Component,
+		Icon:      menu.Icon,
+		Sort:      menu.Sort,
+		ApiUrl:    menu.ApiUrl,
+		ApiMethod: menu.ApiMethod,
+		Visible:   menu.Visible,
+		Status:    menu.Status,
+		Remark:    menu.Remark,
 	}
-
 	return resp, nil
 }

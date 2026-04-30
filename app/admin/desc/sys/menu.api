@@ -66,6 +66,10 @@ type (
 		PageRequest
 		// 菜单ID，用于精确搜索（可选）
 		ID int64 `json:"id,optional"`
+		// 菜单名称，用于模糊搜索（可选）
+		Name string `json:"name,optional"`
+		// 状态筛选（可选）
+		Status bool `json:"status,optional"`
 	}
 	// 菜单列表查询响应
 	MenuListResponse {

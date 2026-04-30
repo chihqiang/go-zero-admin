@@ -114,7 +114,9 @@ type MenuInfo struct {
 
 type MenuListRequest struct {
 	PageRequest
-	ID int64 `json:"id,optional"`
+	ID     int64  `json:"id,optional"`
+	Name   string `json:"name,optional"`
+	Status bool   `json:"status,optional"`
 }
 
 type MenuListResponse struct {
