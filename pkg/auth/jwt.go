@@ -24,7 +24,7 @@ const TokenTypeRefresh = "refresh"
 
 // JWTConfig JWT 配置
 type JWTConfig struct {
-	Secret        string // Token 签名密钥（Access 和 Refresh 使用同一个密钥）
+	AccessSecret  string // Token 签名密钥（Access 和 Refresh 使用同一个密钥）
 	AccessExpire  int64  `json:",default=7200"`              // Access Token 过期时间（秒），默认 2 小时
 	RefreshExpire int64  `json:",default=604800"`            // Refresh Token 过期时间（秒），默认 7 天
 	Iss           string `json:",default=go-zero-admin-api"` // 签发者
@@ -70,7 +70,7 @@ func (a *JWTS) GenerateAccessToken(id int64) (string, error) {
 	}
 
 	// 使用HS256算法签名生成Token
-	token, err := jwt.NewWithClaims(jwt.SigningMethodHS256, claims).SignedString([]byte(a.cfg.Secret))
+	token, err := jwt.NewWithClaims(jwt.SigningMethodHS256, claims).SignedString([]byte(a.cfg.AccessSecret))
 	if err != nil {
 		return "", fmt.Errorf("生成Access Token失败: %w", err)
 	}
@@ -106,7 +106,7 @@ func (a *JWTS) GenerateRefreshToken(id int64) (string, error) {
 	}
 
 	// 使用HS256算法签名生成Token
-	token, err := jwt.NewWithClaims(jwt.SigningMethodHS256, claims).SignedString([]byte(a.cfg.Secret))
+	token, err := jwt.NewWithClaims(jwt.SigningMethodHS256, claims).SignedString([]byte(a.cfg.AccessSecret))
 	if err != nil {
 		return "", fmt.Errorf("生成Refresh Token失败: %w", err)
 	}
@@ -203,7 +203,7 @@ func (a *JWTS) ParseAccessToken(tokenString string) (jwt.MapClaims, error) {
 		if _, ok := token.Method.(*jwt.SigningMethodHMAC); !ok {
 			return nil, fmt.Errorf("签名算法错误: %v", token.Header["alg"])
 		}
-		return []byte(a.cfg.Secret), nil
+		return []byte(a.cfg.AccessSecret), nil
 	})
 
 	if err != nil {
@@ -246,7 +246,7 @@ func (a *JWTS) ParseRefreshToken(tokenString string) (jwt.MapClaims, error) {
 		if _, ok := token.Method.(*jwt.SigningMethodHMAC); !ok {
 			return nil, fmt.Errorf("签名算法错误: %v", token.Header["alg"])
 		}
-		return []byte(a.cfg.Secret), nil
+		return []byte(a.cfg.AccessSecret), nil
 	})
 
 	if err != nil {
