@@ -43,9 +43,6 @@ type AccountUpdateRequest struct {
 	Roles    []*IDRequest `json:"roles,optional"`
 }
 
-type EmptyResponse struct {
-}
-
 type IDRequest struct {
 	ID int64 `path:"id" form:"id" json:"id"`
 }
@@ -69,6 +66,21 @@ type LoginResponse struct {
 	ExpiresIn    int64  `json:"expires_in"`
 }
 
+type MenuAllInfo struct {
+	ID        int64  `json:"id"`
+	Pid       int64  `json:"pid"`
+	MenuType  int    `json:"menu_type"`
+	Name      string `json:"name"`
+	Path      string `json:"path"`
+	Component string `json:"component"`
+	Icon      string `json:"icon"`
+	Sort      int    `json:"sort"`
+	ApiUrl    string `json:"api_url"`
+	ApiMethod string `json:"api_method"`
+	Visible   bool   `json:"visible"`
+	Status    bool   `json:"status"`
+}
+
 type MenuCreateRequest struct {
 	Name      string `json:"name" validate:"required"`
 	MenuType  int    `json:"menu_type" validate:"required"`
@@ -80,34 +92,29 @@ type MenuCreateRequest struct {
 	ApiMethod string `json:"api_method"`
 	Visible   bool   `json:"visible,optional"`
 	Status    bool   `json:"status,optional"`
-	ParentID  int64  `json:"parent_id"`
+	Pid       int64  `json:"pid"`
 	Remark    string `json:"remark"`
 }
 
 type MenuInfo struct {
-	ID        int64       `json:"id"`
-	ParentID  int64       `json:"parent_id"`
-	MenuType  int         `json:"menu_type"`
-	Name      string      `json:"name"`
-	Path      string      `json:"path"`
-	Component string      `json:"component"`
-	Icon      string      `json:"icon"`
-	Sort      int         `json:"sort"`
-	ApiUrl    string      `json:"api_url"`
-	ApiMethod string      `json:"api_method"`
-	Visible   bool        `json:"visible"`
-	Status    bool        `json:"status"`
-	Remark    string      `json:"remark"`
-	CreatedAt string      `json:"created_at,omitempty"`
-	UpdatedAt string      `json:"updated_at,omitempty"`
-	Children  []*MenuInfo `json:"children,omitempty"`
+	ID        int64  `json:"id"`
+	Pid       int64  `json:"pid"`
+	MenuType  int    `json:"menu_type"`
+	Name      string `json:"name"`
+	Path      string `json:"path"`
+	Component string `json:"component"`
+	Icon      string `json:"icon"`
+	Sort      int    `json:"sort"`
+	ApiUrl    string `json:"api_url"`
+	ApiMethod string `json:"api_method"`
+	Visible   bool   `json:"visible"`
+	Status    bool   `json:"status"`
+	Remark    string `json:"remark"`
 }
 
 type MenuListRequest struct {
 	PageRequest
-	ID     int64  `json:"id,optional"`
-	Name   string `json:"name,optional"`
-	Status bool   `json:"status,optional"`
+	ID int64 `json:"id,optional"`
 }
 
 type MenuListResponse struct {
@@ -127,7 +134,7 @@ type MenuUpdateRequest struct {
 	ApiMethod *string `json:"api_method,optional"`
 	Visible   *bool   `json:"visible,optional"`
 	Status    *bool   `json:"status,optional"`
-	ParentID  *int64  `json:"parent_id,optional"`
+	Pid       *int64  `json:"pid,optional"`
 	Remark    *string `json:"remark,optional"`
 }
 
@@ -137,8 +144,9 @@ type PageRequest struct {
 }
 
 type PageResponse struct {
-	Total   int64 `json:"total"`
-	Current int64 `json:"current_page"`
+	Total int64 `json:"total"`
+	Page  int64 `json:"page"`
+	Size  int64 `json:"size"`
 }
 
 type ProfileMenuInfo struct {
@@ -193,6 +201,14 @@ type RegisterResponse struct {
 	Email string `json:"email"`
 }
 
+type RoleAllInfo struct {
+	ID     int64  `json:"id"`
+	Name   string `json:"name"`
+	Sort   int    `json:"sort"`
+	Status bool   `json:"status"`
+	Remark string `json:"remark"`
+}
+
 type RoleAssociateMenusRequest struct {
 	ID      int64   `json:"id" validate:"required"`
 	MenuIds []int64 `json:"menu_ids" validate:"required"`
@@ -207,20 +223,17 @@ type RoleCreateRequest struct {
 }
 
 type RoleInfo struct {
-	ID        int64           `json:"id"`
-	Name      string          `json:"name"`
-	Sort      int             `json:"sort"`
-	Status    bool            `json:"status"`
-	Remark    string          `json:"remark"`
-	CreatedAt string          `json:"created_at,omitempty"`
-	UpdatedAt string          `json:"updated_at,omitempty"`
-	Menus     []*RoleMenuInfo `json:"menus"`
+	ID     int64           `json:"id"`
+	Name   string          `json:"name"`
+	Sort   int             `json:"sort"`
+	Status bool            `json:"status"`
+	Remark string          `json:"remark"`
+	Menus  []*RoleMenuInfo `json:"menus"`
 }
 
 type RoleListRequest struct {
 	PageRequest
-	ID   int64  `json:"id,optional"`
-	Name string `json:"name,optional"`
+	ID int64 `json:"id,optional"`
 }
 
 type RoleListResponse struct {
@@ -240,18 +253,4 @@ type RoleUpdateRequest struct {
 	Status *bool        `json:"status,optional"`
 	Remark *string      `json:"remark,optional"`
 	Menus  []*IDRequest `json:"menus,optional"`
-}
-
-type SortItem struct {
-	ID   int64 `path:"id" form:"id" json:"id"`
-	Sort int   `path:"sort" form:"sort" json:"sort"`
-}
-
-type SortRequest struct {
-	Items []*SortItem `json:"items"`
-}
-
-type UpdateStatusRequest struct {
-	ID     int64 `path:"id" form:"id" json:"id"`
-	Status bool  `path:"status" form:"status" json:"status"`
 }

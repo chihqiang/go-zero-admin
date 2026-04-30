@@ -97,6 +97,6 @@ service admin-api {
 
 	// 删除账号
 	@handler DeleteHandler
-	delete /delete (IDRequest) returns (EmptyResponse)
+	delete /delete (IDRequest)
 }
 

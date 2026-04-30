@@ -16,10 +16,6 @@ type IDResponse {
 	ID int64 `json:"id"`
 }
 
-// 空响应
-// 无返回数据的接口使用
-type EmptyResponse {}
-
 // 分页请求结构体
 // 所有列表分页接口通用
 // 分页请求参数
@@ -36,31 +32,7 @@ type PageResponse {
 	// 数据总条数
 	Total int64 `json:"total"`
 	// 当前页码
-	Current int64 `json:"current_page"`
-}
-
-// 排序项结构体
-// 用于批量排序接口
-type SortItem {
-	// 数据ID
-	ID int64 `path:"id" form:"id" json:"id"`
-	// 排序序号
-	Sort int `path:"sort" form:"sort" json:"sort"`
-}
-
-// 批量排序请求结构体
-// 传递一组需要排序的数据
-type SortRequest {
-	// 排序项列表
-	Items []*SortItem `json:"items"`
-}
-
-// 修改状态请求结构体
-// 启用/禁用类接口通用
-type UpdateStatusRequest {
-	// 数据ID
-	ID int64 `path:"id" form:"id" json:"id"`
-	// 状态 true-启用 false-禁用
-	Status bool `path:"status" form:"status" json:"status"`
+	Page int64 `json:"page"`
+	Size int64 `json:"size"`
 }
 

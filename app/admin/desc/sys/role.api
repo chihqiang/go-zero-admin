@@ -23,12 +23,20 @@ type (
 		Status bool `json:"status"`
 		// 备注
 		Remark string `json:"remark"`
-		// 创建时间
-		CreatedAt string `json:"created_at,omitempty"`
-		// 更新时间
-		UpdatedAt string `json:"updated_at,omitempty"`
 		// 关联菜单列表
 		Menus []*RoleMenuInfo `json:"menus"`
+	}
+	RoleAllInfo {
+		// 角色ID
+		ID int64 `json:"id"`
+		// 角色名称
+		Name string `json:"name"`
+		// 显示顺序
+		Sort int `json:"sort"`
+		// 状态：true-正常 false-禁用
+		Status bool `json:"status"`
+		// 备注
+		Remark string `json:"remark"`
 	}
 	// 角色分页列表请求
 	RoleListRequest {
@@ -36,8 +44,6 @@ type (
 		PageRequest
 		// 角色ID，用于精确搜索（可选）
 		ID int64 `json:"id,optional"`
-		// 角色名称，用于模糊搜索（可选）
-		Name string `json:"name,optional"`
 	}
 	// 角色分页列表响应
 	RoleListResponse {
@@ -112,7 +118,7 @@ service admin-api {
 
 	// 删除角色
 	@handler DeleteHandler
-	delete /delete (IDRequest) returns (EmptyResponse)
+	delete /delete (IDRequest)
 
 	// 获取所有角色列表
 	@handler AllHandler

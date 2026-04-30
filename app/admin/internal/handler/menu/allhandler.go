@@ -6,20 +6,19 @@ package menu
 import (
 	"net/http"
 
-	xhttp "github.com/zeromicro/x/http"
+	"github.com/zeromicro/go-zero/rest/httpx"
 	"go-zero-admin/app/admin/internal/logic/menu"
 	"go-zero-admin/app/admin/internal/svc"
 )
 
 func AllHandler(svcCtx *svc.ServiceContext) http.HandlerFunc {
 	return func(w http.ResponseWriter, r *http.Request) {
-
 		l := menu.NewAllLogic(r.Context(), svcCtx)
 		resp, err := l.All()
 		if err != nil {
-			xhttp.JsonBaseResponseCtx(r.Context(), w, err)
+			httpx.ErrorCtx(r.Context(), w, err)
 		} else {
-			xhttp.JsonBaseResponseCtx(r.Context(), w, resp)
+			httpx.OkJsonCtx(r.Context(), w, resp)
 		}
 	}
 }

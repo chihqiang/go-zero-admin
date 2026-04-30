@@ -26,8 +26,8 @@ func NewDeleteLogic(ctx context.Context, svcCtx *svc.ServiceContext) *DeleteLogi
 	}
 }
 
-func (l *DeleteLogic) Delete(req *types.IDRequest) (resp *types.EmptyResponse, err error) {
+func (l *DeleteLogic) Delete(req *types.IDRequest) error {
 	// todo: add your logic here and delete this line
 
-	return
+	return nil
 }

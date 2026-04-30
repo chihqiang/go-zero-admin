@@ -26,7 +26,7 @@ func NewAllLogic(ctx context.Context, svcCtx *svc.ServiceContext) *AllLogic {
 	}
 }
 
-func (l *AllLogic) All() (resp []*types.MenuInfo, err error) {
+func (l *AllLogic) All() (resp []*types.MenuAllInfo, err error) {
 	// todo: add your logic here and delete this line
 
 	return
