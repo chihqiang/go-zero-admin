@@ -46,3 +46,7 @@ type Menu struct {
 	Remark    string  `gorm:"type:varchar(500);default:''" json:"remark"`
 	Roles     []*Role `gorm:"many2many:sys_role_menus;" json:"-"`
 }
+
+func (Menu) TableName() string {
+	return "sys_menus"
+}
