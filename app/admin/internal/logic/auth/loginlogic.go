@@ -46,6 +46,9 @@ func (l *LoginLogic) Login(req *types.LoginRequest) (resp *types.LoginResponse, 
 		return nil, errors.New("账号或密码错误")
 	}
 	token, refreshToken, err := l.svcCtx.Jwts.GenerateTokenPair(account.ID)
+	if err != nil {
+		return nil, err
+	}
 	return &types.LoginResponse{
 		ID:           account.ID,
 		Name:         account.Name,

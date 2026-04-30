@@ -28,7 +28,14 @@ func NewRefreshLogic(ctx context.Context, svcCtx *svc.ServiceContext) *RefreshLo
 }
 
 func (l *RefreshLogic) Refresh(req *types.RefreshTokenRequest) (resp *types.RefreshTokenResponse, err error) {
-	// todo: add your logic here and delete this line
-
-	return
+	token, refreshToken, err := l.svcCtx.Jwts.RefreshTokenPair(req.RefreshToken)
+	if err != nil {
+		return nil, err
+	}
+	return &types.RefreshTokenResponse{
+		AccessToken:  token,
+		RefreshToken: refreshToken,
+		TokenType:    "bearer",
+		ExpiresIn:    l.svcCtx.Config.Auth.AccessExpire,
+	}, nil
 }
