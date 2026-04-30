@@ -8,7 +8,10 @@ import (
 
 	"go-zero-admin/app/admin/internal/svc"
 	"go-zero-admin/app/admin/internal/types"
+	"go-zero-admin/app/common/models"
+	"go-zero-admin/pkg/orm"
 
+	"github.com/jinzhu/copier"
 	"github.com/zeromicro/go-zero/core/logx"
 )
 
@@ -27,7 +30,33 @@ func NewListLogic(ctx context.Context, svcCtx *svc.ServiceContext) *ListLogic {
 }
 
 func (l *ListLogic) List(req *types.RoleListRequest) (resp *types.RoleListResponse, err error) {
-	// todo: add your logic here and delete this line
+	db := l.svcCtx.DB.Model(&models.Role{}).Order("sort asc")
 
-	return
+	if req.ID > 0 {
+		db = db.Where("id = ?", req.ID)
+	}
+
+	pageData, err := orm.Paginate[*models.Role](db.Preload("Menus"), req.Page, req.Size)
+	if err != nil {
+		return nil, err
+	}
+
+	resp = &types.RoleListResponse{
+		PageResponse: types.PageResponse{
+			Total: pageData.Total,
+			Page:  pageData.Page,
+			Size:  pageData.Size,
+		},
+		Data: make([]*types.RoleInfo, 0, len(pageData.List)),
+	}
+
+	for _, role := range pageData.List {
+		var info types.RoleInfo
+		if err := copier.Copy(&info, role); err != nil {
+			return nil, err
+		}
+		resp.Data = append(resp.Data, &info)
+	}
+
+	return resp, nil
 }

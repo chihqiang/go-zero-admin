@@ -8,7 +8,9 @@ import (
 
 	"go-zero-admin/app/admin/internal/svc"
 	"go-zero-admin/app/admin/internal/types"
+	"go-zero-admin/app/common/models"
 
+	"github.com/jinzhu/copier"
 	"github.com/zeromicro/go-zero/core/logx"
 )
 
@@ -27,7 +29,25 @@ func NewAssociateMenusLogic(ctx context.Context, svcCtx *svc.ServiceContext) *As
 }
 
 func (l *AssociateMenusLogic) AssociateMenus(req *types.RoleAssociateMenusRequest) (resp *types.RoleInfo, err error) {
-	// todo: add your logic here and delete this line
+	var role models.Role
+	if err := l.svcCtx.DB.Where(&models.Role{ID: req.ID}).Preload("Menus").First(&role).Error; err != nil {
+		return nil, err
+	}
 
-	return
+	var menus []models.Menu
+	if len(req.MenuIds) > 0 {
+		l.svcCtx.DB.Where("id IN ?", req.MenuIds).Find(&menus)
+	}
+
+	if err := l.svcCtx.DB.Model(&role).Association("Menus").Replace(&menus); err != nil {
+		return nil, err
+	}
+
+	resp = &types.RoleInfo{}
+	l.svcCtx.DB.Preload("Menus").First(&role, req.ID)
+	if err := copier.Copy(resp, &role); err != nil {
+		return nil, err
+	}
+
+	return resp, nil
 }

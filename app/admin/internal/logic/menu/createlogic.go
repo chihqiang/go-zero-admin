@@ -8,7 +8,9 @@ import (
 
 	"go-zero-admin/app/admin/internal/svc"
 	"go-zero-admin/app/admin/internal/types"
+	"go-zero-admin/app/common/models"
 
+	"github.com/jinzhu/copier"
 	"github.com/zeromicro/go-zero/core/logx"
 )
 
@@ -27,7 +29,13 @@ func NewCreateLogic(ctx context.Context, svcCtx *svc.ServiceContext) *CreateLogi
 }
 
 func (l *CreateLogic) Create(req *types.MenuCreateRequest) (resp *types.MenuInfo, err error) {
-	// todo: add your logic here and delete this line
+	var menu models.Menu
+	copier.Copy(&menu, req)
+	if err := l.svcCtx.DB.Create(&menu).Error; err != nil {
+		return nil, err
+	}
 
-	return
+	resp = &types.MenuInfo{}
+	copier.Copy(resp, &menu)
+	return resp, nil
 }

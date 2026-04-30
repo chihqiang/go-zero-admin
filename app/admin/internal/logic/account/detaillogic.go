@@ -8,7 +8,9 @@ import (
 
 	"go-zero-admin/app/admin/internal/svc"
 	"go-zero-admin/app/admin/internal/types"
+	"go-zero-admin/app/common/models"
 
+	"github.com/jinzhu/copier"
 	"github.com/zeromicro/go-zero/core/logx"
 )
 
@@ -27,7 +29,11 @@ func NewDetailLogic(ctx context.Context, svcCtx *svc.ServiceContext) *DetailLogi
 }
 
 func (l *DetailLogic) Detail(req *types.IDRequest) (resp *types.AccountInfo, err error) {
-	// todo: add your logic here and delete this line
-
-	return
+	var account models.Account
+	if err := l.svcCtx.DB.Where(&models.Account{ID: req.ID}).Preload("Roles").First(&account).Error; err != nil {
+		return nil, err
+	}
+	resp = &types.AccountInfo{}
+	_ = copier.Copy(&resp, &account)
+	return resp, nil
 }

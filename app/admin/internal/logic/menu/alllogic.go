@@ -8,7 +8,9 @@ import (
 
 	"go-zero-admin/app/admin/internal/svc"
 	"go-zero-admin/app/admin/internal/types"
+	"go-zero-admin/app/common/models"
 
+	"github.com/jinzhu/copier"
 	"github.com/zeromicro/go-zero/core/logx"
 )
 
@@ -27,7 +29,15 @@ func NewAllLogic(ctx context.Context, svcCtx *svc.ServiceContext) *AllLogic {
 }
 
 func (l *AllLogic) All() (resp []*types.MenuAllInfo, err error) {
-	// todo: add your logic here and delete this line
-
-	return
+	var menus []*models.Menu
+	if err := l.svcCtx.DB.Where(&models.Menu{}).Find(&menus).Error; err != nil {
+		return nil, err
+	}
+	resp = make([]*types.MenuAllInfo, 0, len(menus))
+	for _, menu := range menus {
+		var info *types.MenuAllInfo
+		copier.Copy(&info, &menu)
+		resp = append(resp, info)
+	}
+	return resp, nil
 }

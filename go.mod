@@ -4,6 +4,7 @@ go 1.24.11
 
 require (
 	github.com/golang-jwt/jwt/v4 v4.5.2
+	github.com/jinzhu/copier v0.4.0
 	github.com/zeromicro/go-zero v1.10.1
 	github.com/zeromicro/x v0.0.0-20240408115609-8224c482b07e
 	golang.org/x/crypto v0.48.0
@@ -30,7 +31,6 @@ require (
 	github.com/jackc/pgservicefile v0.0.0-20240606120523-5a60cdf6a761 // indirect
 	github.com/jackc/pgx/v5 v5.8.0 // indirect
 	github.com/jackc/puddle/v2 v2.2.2 // indirect
-	github.com/jinzhu/copier v0.4.0 // indirect
 	github.com/jinzhu/inflection v1.0.0 // indirect
 	github.com/jinzhu/now v1.1.5 // indirect
 	github.com/klauspost/compress v1.18.0 // indirect
