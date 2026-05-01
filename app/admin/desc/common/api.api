@@ -1,12 +1,11 @@
 syntax = "v1"
 
 // 通用ID结构体
-// 用于接收/返回单一ID数据
-// ID路径参数请求
-// 适用于通过URL路径传递ID的接口
+// 用于接收单一ID数据
+// 适用于GET请求通过URL查询参数传递ID的接口，如 /detail?id=1
 type IDRequest {
 	// 数据ID
-	ID int64 `path:"id" form:"id" json:"id"`
+	ID int64 `form:"id" json:"id"`
 }
 
 // ID响应
@@ -21,9 +20,9 @@ type IDResponse {
 // 分页请求参数
 type PageRequest {
 	// 当前页码
-	Page int64 `path:"page" form:"page" json:"page"`
+	Page int64 `form:"page" json:"page"`
 	// 每页显示条数
-	Size int64 `path:"size" form:"size" json:"size"`
+	Size int64 `form:"size" json:"size"`
 }
 
 // 分页响应结构体

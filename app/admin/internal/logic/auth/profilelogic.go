@@ -6,8 +6,9 @@ package auth
 import (
 	"context"
 	"fmt"
-	"github.com/jinzhu/copier"
 	"go-zero-admin/app/common/models"
+
+	"github.com/jinzhu/copier"
 
 	"go-zero-admin/app/admin/internal/svc"
 	"go-zero-admin/app/admin/internal/types"
@@ -40,7 +41,7 @@ func (l *ProfileLogic) Profile() (resp *types.ProfileResponse, err error) {
 		return nil, fmt.Errorf("账户不存在")
 	}
 	resp = &types.ProfileResponse{}
-	_ = copier.Copy(&resp, &account)
+	_ = copier.Copy(resp, &account)
 	// 收集所有菜单并去重
 	menuMap := make(map[int64]*models.Menu)
 	for _, role := range account.Roles {

@@ -44,7 +44,7 @@ type AccountUpdateRequest struct {
 }
 
 type IDRequest struct {
-	ID int64 `path:"id" form:"id" json:"id"`
+	ID int64 `form:"id" json:"id"`
 }
 
 type IDResponse struct {
@@ -141,8 +141,8 @@ type MenuUpdateRequest struct {
 }
 
 type PageRequest struct {
-	Page int64 `path:"page" form:"page" json:"page"`
-	Size int64 `path:"size" form:"size" json:"size"`
+	Page int64 `form:"page" json:"page"`
+	Size int64 `form:"size" json:"size"`
 }
 
 type PageResponse struct {
