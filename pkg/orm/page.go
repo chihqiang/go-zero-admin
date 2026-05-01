@@ -7,7 +7,7 @@ import (
 
 type PageResponse[T any] struct {
 	Total int64 `json:"total"`
-	List  []T   `json:"list"`
+	Data  []T   `json:"data"`
 	Page  int64 `json:"page"`
 	Size  int64 `json:"size"`
 }
@@ -43,12 +43,12 @@ func Paginate[T any](db *gorm.DB, page int64, size int64, scopes ...func(db *gor
 	}
 	// 无数据直接返回空列表，避免无用查询
 	if total == 0 {
-		return PageResponse[T]{
-			Total: total,
-			Page:  page,
-			Size:  size,
-			List:  make([]T, 0),
-		}, nil
+	return PageResponse[T]{
+		Total: total,
+		Page:  page,
+		Size:  size,
+		Data:  make([]T, 0),
+	}, nil
 	}
 	// ========== 2. 分页查询数据 ==========
 	offset := (page - 1) * size
@@ -60,6 +60,6 @@ func Paginate[T any](db *gorm.DB, page int64, size int64, scopes ...func(db *gor
 		Total: total,
 		Page:  page,
 		Size:  size,
-		List:  data,
+		Data:  data,
 	}, nil
 }
