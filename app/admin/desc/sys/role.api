@@ -92,7 +92,7 @@ type (
 // 服务配置
 @server (
 	// 接口统一前缀
-	prefix: /api/v1/role
+	prefix: /api/v1/sys/role
 	// 分组名称
 	group: role
 	// 开启JWT认证

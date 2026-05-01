@@ -71,7 +71,7 @@ type (
 // 服务配置：账号管理模块
 @server (
 	// 接口统一前缀
-	prefix: /api/v1/account
+	prefix: /api/v1/sys/account
 	// 路由分组名称
 	group: account
 	// 开启JWT身份认证

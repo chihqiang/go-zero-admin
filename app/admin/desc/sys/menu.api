@@ -139,7 +139,7 @@ type (
 // 服务配置
 @server (
 	// 接口前缀
-	prefix: /api/v1/menu
+	prefix: /api/v1/sys/menu
 	// 分组
 	group: menu
 	// JWT认证

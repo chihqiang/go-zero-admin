@@ -45,7 +45,7 @@ func RegisterHandlers(server *rest.Server, serverCtx *svc.ServiceContext) {
 			},
 		},
 		rest.WithJwt(serverCtx.Config.Auth.AccessSecret),
-		rest.WithPrefix("/api/v1/account"),
+		rest.WithPrefix("/api/v1/sys/account"),
 	)
 
 	server.AddRoutes(
@@ -119,7 +119,7 @@ func RegisterHandlers(server *rest.Server, serverCtx *svc.ServiceContext) {
 			},
 		},
 		rest.WithJwt(serverCtx.Config.Auth.AccessSecret),
-		rest.WithPrefix("/api/v1/menu"),
+		rest.WithPrefix("/api/v1/sys/menu"),
 	)
 
 	server.AddRoutes(
@@ -161,6 +161,6 @@ func RegisterHandlers(server *rest.Server, serverCtx *svc.ServiceContext) {
 			},
 		},
 		rest.WithJwt(serverCtx.Config.Auth.AccessSecret),
-		rest.WithPrefix("/api/v1/role"),
+		rest.WithPrefix("/api/v1/sys/role"),
 	)
 }
