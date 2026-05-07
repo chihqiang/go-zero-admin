@@ -53,10 +53,10 @@ func (l *ListLogic) List(req *types.MenuListRequest) (resp *types.MenuListRespon
 			Page:  pageData.Page,
 			Size:  pageData.Size,
 		},
-		Data: make([]*types.MenuInfo, 0, len(pageData.List)),
+		Data: make([]*types.MenuInfo, 0, len(pageData.Data)),
 	}
 
-	for _, menu := range pageData.List {
+	for _, menu := range pageData.Data {
 		var info types.MenuInfo
 		if err := copier.Copy(&info, menu); err != nil {
 			return nil, err

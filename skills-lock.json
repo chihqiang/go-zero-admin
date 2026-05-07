@@ -1,0 +1,11 @@
+{
+  "version": 1,
+  "skills": {
+    "zero-skills": {
+      "source": "zeromicro/zero-skills",
+      "sourceType": "github",
+      "skillPath": "SKILL.md",
+      "computedHash": "42b2695d55a955b8927dee1dbd03d018d5aaa19250cd1cce0968743b72b9ec96"
+    }
+  }
+}

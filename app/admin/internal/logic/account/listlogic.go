@@ -47,10 +47,10 @@ func (l *ListLogic) List(req *types.AccountListRequest) (resp *types.AccountList
 			Page:  pageData.Page,
 			Size:  pageData.Size,
 		},
-		Data: make([]*types.AccountInfo, 0, len(pageData.List)),
+		Data: make([]*types.AccountInfo, 0, len(pageData.Data)),
 	}
 
-	for _, account := range pageData.List {
+	for _, account := range pageData.Data {
 		var info types.AccountInfo
 		if err := copier.Copy(&info, account); err != nil {
 			return nil, err

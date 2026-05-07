@@ -47,10 +47,10 @@ func (l *ListLogic) List(req *types.RoleListRequest) (resp *types.RoleListRespon
 			Page:  pageData.Page,
 			Size:  pageData.Size,
 		},
-		Data: make([]*types.RoleInfo, 0, len(pageData.List)),
+		Data: make([]*types.RoleInfo, 0, len(pageData.Data)),
 	}
 
-	for _, role := range pageData.List {
+	for _, role := range pageData.Data {
 		var info types.RoleInfo
 		if err := copier.Copy(&info, role); err != nil {
 			return nil, err
